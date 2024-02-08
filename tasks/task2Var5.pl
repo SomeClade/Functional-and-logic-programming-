@@ -48,15 +48,19 @@ parent(duhovlad,zlatomir).
 parent(zhdana,zdislava).
 parent(zhdana,zlatomir).
 
+
 men():- man(X), print(X), nl, fail.
 women():- woman(X), print(X), nl, fail.
 children(X):- parent(X,Y), print(Y), nl, fail.
 
 mother(X,Y):- woman(X), parent(X,Y).
 mother(X):- mother(Y,X), print(Y), nl, fail.
-
 % проверяет является ли X сыном Y
 sons(X,Y):- parent(Y,X), man(X), print(X), nl, fail.
+
+% Выводит всех детей Х
+
+son(X):- parent(X,Y), man(Y), print(Y), nl, fail.
 
 % проверяет, является ли X мужем Y. check_married() проверяет на наличие
 % общего ребёнка
@@ -65,3 +69,6 @@ check_married(X,Y) :- parent(X, Z), parent(Y, Z), X\=Y.
 
 husband(X,Y):- check_married(X,Y),man(X).
 
+% Выводит мужа X
+
+husband(X):- check_married(Y,X), man(Y).
