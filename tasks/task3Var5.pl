@@ -65,3 +65,15 @@ grand_pas(X) :- parent(Z, X),parent(Y, Z),man(Y),print(Y), nl, fail.
 % проверяет, является ли X и Y дедушкой и внучкой или внучкой и дедушкой.
 
 grand_pa_and_da(X, Y) :- grand_pa(X, Y); grand_pa(Y, X).
+
+%  Предикаты для проверки тети и вывода всех теть
+
+aunt(X, Y) :- parent(Z, Y),sister(X, Z).
+
+sister(X, Y) :- parent(Z, X),parent(Z, Y),woman(X),X \= Y.
+
+%Вывод всех теть X
+
+aunts(X) :- parent(Z, X),sister(Y, Z),print(Y), nl, fail.
+
+
