@@ -61,3 +61,7 @@ mother(X):- mother(Y,X), print(Y), nl, fail.
 grand_pa(X, Y) :- parent(X, Z), parent(Z, Y),man(X).
 
 grand_pas(X) :- parent(Z, X),parent(Y, Z),man(Y),print(Y), nl, fail.
+
+% проверяет, является ли X и Y дедушкой и внучкой или внучкой и дедушкой.
+
+	grand_pa_and_da(X, Y) :- grand_pa(X, Y); grand_pa(Y, X).
