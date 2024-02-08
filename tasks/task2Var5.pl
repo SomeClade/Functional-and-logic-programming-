@@ -55,6 +55,12 @@ children(X):- parent(X,Y), print(Y), nl, fail.
 
 mother(X,Y):- woman(X), parent(X,Y).
 mother(X):- mother(Y,X), print(Y), nl, fail.
+
 % проверяет является ли X сыном Y
 sons(X,Y):- parent(Y,X), man(X), print(X), nl, fail.
+
+% Выводит всех детей Х
+
+son(X):- parent(X,Y), man(Y), print(Y), nl, fail.
+
 
