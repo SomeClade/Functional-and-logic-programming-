@@ -56,8 +56,6 @@ children(X):- parent(X,Y), print(Y), nl, fail.
 mother(X,Y):- woman(X), parent(X,Y).
 mother(X):- mother(Y,X), print(Y), nl, fail.
 
-% провер€ет, €вл€етс€ ли X дедушкой Y. ƒедушкой €вл€етс€ мужчина, который €вл€етс€ родителем родител€ Y. 
+% провер€ет, €вл€етс€ ли X дедушкой Y. ƒедушкой €вл€етс€ мужчина, который €вл€етс€ родителем родител€ Y.
 
 grand_pa(X, Y) :- parent(X, Z), parent(Z, Y),man(X).
-
-grand_pas(X) :- parent(Z, X),parent(Y, Z),man(Y),print(Y), nl, fail.
