@@ -1,1 +1,1 @@
- Functional-and-logic-programming-lab
+# Functional-and-logic-programming-lab
