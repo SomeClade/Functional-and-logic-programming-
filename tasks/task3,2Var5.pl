@@ -78,3 +78,10 @@ grand_pas(X) :-parent(Z, X),father(Y, Z),print(Y), nl, fail.
 
 % Предикат, который проверяет, являются ли X и Y дедушкой и внучкой или внучкой и дедушкой
 grand_pa_and_da(X, Y) :-(grand_pa(X, Y) ; grand_pa(Y, X)).
+
+
+% Предикат, который проверяет, является ли X тетей Y
+aunt(X, Y) :-parent(Z, Y),sister(X, Z).
+
+% Предикат, который выводит всех тетей X
+aunts(X) :-parent(Z, X),sister(Y, Z),print(Y), nl, fail.
