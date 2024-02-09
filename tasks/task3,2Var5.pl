@@ -70,3 +70,15 @@ sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
 % Определяет сестер
 sister(X, Y) :- woman(X), sibling(X, Y).
 
+% Предикат, который проверяет, является ли X дедушкой Y
+grand_pa(X, Y) :-
+parent(X, Z),
+parent(Z, Y),
+man(X).
+
+% Предикат, который выводит всех дедушек X
+grand_pas(X) :-
+parent(Z, X),
+father(Y, Z),
+print(Y), nl, fail.
+
