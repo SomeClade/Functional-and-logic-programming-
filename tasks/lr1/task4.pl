@@ -106,7 +106,7 @@ fault(paper) :-
     problem(paper_jam),
     problem(out_of_paper).
 
-%ƒобавление ошибок,без добавлени¤ новых вопросов
+%Добавление ошибок,без добавлени¤ новых вопросов
 
 fault(operating_system_error) :-
     problem(boot_failure),
@@ -119,6 +119,46 @@ fault(cable_connection) :-
     problem(blank_display),
     not(problem(long_beep)),
     not(problem(continuous_beeps)).
+	
+	% Добавление новых вопросов и новых ошибок
+	
+	% Добавление уникальных симптомов для новых проблем
+fault(cooling_system) :-
+    problem(overheating),
+    not(problem(long_beep)),
+    not(problem(blank_display)).
+
+fault(memory_module) :-
+    problem(memory_failure),
+    not(problem(boot_failure)),
+    not(problem(bad_sector)).
+
+fault(graphics_card) :-
+    problem(graphics_card_failure),
+    not(problem(repeating_short_beeps)),
+    not(problem(continuous_beeps)).
+
+fault(operating_system) :-
+    problem(os_corruption),
+    not(problem(cannot_read)),
+    not(problem(disc_format)).
+
+fault(computer_virus) :-
+    problem(virus_infection),
+    not(problem(no_beep)),
+    not(problem(not_printing)).
+
+% Вопросы для дополнительной диагностики
+problem(virus_infection):-
+	query('Computer acting suspiciously, possible virus infection?').
+problem(overheating):-
+	query('The computer is overheating?').
+problem(memory_failure):-
+	query('Memory errors occur on the computer?').
+problem(graphics_card_failure):-
+	query('Problems with graphics or video?').
+problem(os_corruption):-
+	query('The computer reports damage to the operating system?').
 
 query(Prompt) :-
     (   asked(Prompt, Reply) -> true
