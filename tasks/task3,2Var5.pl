@@ -71,14 +71,10 @@ sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
 sister(X, Y) :- woman(X), sibling(X, Y).
 
 % Предикат, который проверяет, является ли X дедушкой Y
-grand_pa(X, Y) :-
-parent(X, Z),
-parent(Z, Y),
-man(X).
+grand_pa(X, Y) :-parent(X, Z),parent(Z, Y),man(X).
 
 % Предикат, который выводит всех дедушек X
-grand_pas(X) :-
-parent(Z, X),
-father(Y, Z),
-print(Y), nl, fail.
+grand_pas(X) :-parent(Z, X),father(Y, Z),print(Y), nl, fail.
 
+% Предикат, который проверяет, являются ли X и Y дедушкой и внучкой или внучкой и дедушкой
+grand_pa_and_da(X, Y) :-(grand_pa(X, Y) ; grand_pa(Y, X)).
