@@ -9,31 +9,35 @@ main :-
     write('The problem cannot be recognized.'), nl.
 
 fact(mamals,Answer) :-
-    query('РЇРІР»СЏРµС‚СЃСЏ Р»Рё Р¶РёРІРѕС‚РЅРѕРµ РјР»РµРєРѕРїРёС‚Р°СЋС‰РёРј?',Answer).
+    query('Является ли животное млекопитающим?',Answer).
 
 fact(bird,Answer) :-
-    query('РЇРІР»СЏРµС‚СЃСЏ Р»Рё Р¶РёРІРѕС‚РЅРѕРµ РїС‚РёС†РµР№?',Answer).
+    query('Является ли животное птицей?',Answer).
 
 fact(aquatic,Answer) :-
-    query('Р–РёРІРµС‚ Р»Рё Р¶РёРІРѕС‚РЅРѕРµ РІ РІРѕРґРµ?',Answer).
+    query('Живет ли животное в воде?',Answer).
 
 fact(predator,Answer) :-
-    query('РЇРІР»СЏРµС‚СЃСЏ Р»Рё Р¶РёРІРѕС‚РЅРѕРµ С…РёС‰РЅРёРєРѕРј?',Answer).
+    query('Является ли животное хищником?',Answer).
 
 fact(fur,Answer):-
-    query('Р•СЃС‚СЊ Р»Рё Сѓ Р¶РёРІРѕС‚РЅРѕРіРѕ С€РµСЂСЃС‚СЊ?',Answer).
+    query('Есть ли у животного шерсть?',Answer).
 
 fact(domestic,Answer):-
-    query('РЇРІР»СЏРµС‚СЃСЏ Р»Рё Р¶РёРІРѕС‚РЅРѕРµ РґРѕРјР°С‰РЅРёРј?',Answer).
-	
-	
+    query('Является ли животное домащним?',Answer).
+
+fact(strip,Answer):-
+	query('Есть ли у животного полоски?',Answer).
+
+
 animal(lion) :-
     fact(mamals,y),
     fact(predator,y),
     fact(fur,y),
     fact(aquatic,n),
     fact(bird,n),
-    fact(domestic,n).
+    fact(domestic,n),
+    fact(strip,n).
 
 animal(tiger) :-
     fact(mamals,y),
@@ -41,10 +45,12 @@ animal(tiger) :-
     fact(fur,y),
     fact(aquatic,n),
     fact(bird,n),
+    fact(strip,y),
     fact(domestic,n).
 
 animal(whale) :-
     fact(mamals,y),
+    fact(strip,n),
     fact(aquatic,y),
     fact(predator,y),
     fact(fur,n),
@@ -56,11 +62,23 @@ animal(dolphin) :-
     fact(aquatic,y),
     fact(predator,n),
     fact(fur,n),
+    fact(strip,n),
     fact(bird,n),
     fact(domestic,n).
 
 animal(cat):-
     fact(mamals,y),
+    fact(strip,n),
+    fact(predator,y),
+    fact(fur,y),
+    fact(aquatic,n),
+    fact(bird,n),
+    fact(domestic,y).
+
+
+animal(cat_strip):-
+    fact(mamals,y),
+    fact(strip,y),
     fact(predator,y),
     fact(fur,y),
     fact(aquatic,n),
@@ -73,10 +91,12 @@ animal(shark):-
     fact(mamals,n),
     fact(fur,n),
     fact(bird,n),
+	fact(strip,n),
     fact(domestic,n).
 
 animal(goldfish) :-
     fact(aquatic,y),
+	fact(strip,n),
     fact(predator,n),
     fact(mamals,n),
     fact(fur,n),
@@ -86,6 +106,8 @@ animal(goldfish) :-
 animal(parrot) :-
     fact(mamals,n),
     fact(bird,y),
+	fact(strip,y),
+	fact(strip,n),
     fact(aquatic,n),
     fact(predator,n),
     fact(fur,n),
@@ -94,6 +116,7 @@ animal(parrot) :-
 animal(penguin) :-
     fact(mamals,n),
     fact(bird,y),
+	fact(strip,n),
     fact(aquatic,y),
     fact(predator,n),
     fact(fur,n),
@@ -101,6 +124,7 @@ animal(penguin) :-
 
 animal(cow) :-
     fact(mamals,y),
+	fact(strip,n),
     fact(bird,n),
     fact(aquatic,n),
     fact(predator,n),
@@ -113,6 +137,7 @@ animal(bear) :-
     fact(aquatic,n),
     fact(predator,y),
     fact(fur,y),
+	fact(strip,n),
     fact(domestic,n).
 
 animal(wolf) :-
@@ -121,6 +146,7 @@ animal(wolf) :-
     fact(aquatic,n),
     fact(predator,y),
     fact(fur,y),
+    fact(strip,n),
     fact(domestic,n).
 
 animal(horse) :-
@@ -129,6 +155,7 @@ animal(horse) :-
     fact(aquatic,n),
     fact(predator,n),
     fact(fur,y),
+    fact(strip,n),
     fact(domestic,y).
 
 animal(zebra) :-
@@ -137,6 +164,7 @@ animal(zebra) :-
     fact(aquatic,n),
     fact(predator,n),
     fact(fur,y),
+    fact(strip,y),
     fact(domestic,n).
 
 animal(elephant) :-
@@ -145,11 +173,13 @@ animal(elephant) :-
     fact(aquatic,n),
     fact(predator,n),
     fact(fur,n),
+    fact(strip,n),
     fact(domestic,n).
 
 animal(crocodile) :-
     fact(mamals,n),
     fact(bird,n),
+    fact(strip,n),
     fact(aquatic,y),
     fact(predator,y),
     fact(fur,n),
@@ -157,6 +187,7 @@ animal(crocodile) :-
 
 animal(eagle) :-
     fact(mamals,n),
+    fact(strip,n),
     fact(bird,y),
     fact(aquatic,n),
     fact(predator,y),
@@ -169,6 +200,7 @@ animal(snake) :-
     fact(aquatic,n),
     fact(predator,y),
     fact(fur,n),
+    fact(strip,n),
     fact(domestic,n).
 
 query(Prompt,Answer) :-
@@ -178,3 +210,13 @@ query(Prompt,Answer) :-
 	assert(asked(Prompt, Reply))
     ),
     Reply = Answer.
+
+
+
+
+
+
+
+
+
+
