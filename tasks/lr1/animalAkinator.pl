@@ -1,222 +1,85 @@
+:- dynamic asked/2.
+
+% Животные и их характеристики
+animal(lion, [mammal-yes, aquatic-no, predator-yes, fur-yes, domestic-no, stripes-no]).
+animal(tiger, [mammal-yes, aquatic-no, predator-yes, fur-yes, domestic-no, stripes-yes]).
+animal(whale, [mammal-yes, aquatic-yes, predator-no, fur-no, domestic-no, stripes-no]).
+animal(dolphin, [mammal-yes, aquatic-yes, predator-yes, fur-no, domestic-no, stripes-no]).
+animal(cat, [mammal-yes, aquatic-no, predator-yes, fur-yes, domestic-yes, stripes-no]).
+animal(goldfish, [mammal-no, aquatic-yes, predator-no, fur-no, domestic-yes, stripes-no]).
+animal(shark, [mammal-no, aquatic-yes, predator-yes, fur-no, domestic-no, stripes-no]).
+
+% Вопросы для определения животного
+question(mammal, 'Является ли животное млекопитающим?').
+question(aquatic, 'Живет ли животное в воде?').
+question(predator, 'Является ли животное хищником?').
+question(fur, 'Есть ли у животного шерсть?').
+question(domestic, 'Является ли животное домашним?').
+question(stripes, 'Есть ли у животного полосы?').
+
+% Главный цикл
 main :-
     retractall(asked(_,_)),
-    animal(Fa),
-    !,
-    nl,
-    write('The problem is '), write(Fa), write(.), nl.
-main :-
-    nl,
-    write('The problem cannot be recognized.'), nl.
+    findall(A, animal(A, _), Animals),
+    identify(Animals, Result),
+    respond(Result),
+    clear_memory.
 
-fact(mamals,Answer) :-
-    query('Является ли животное млекопитающим?',Answer).
+identify([Animal], Animal) :- !.  % Если осталось одно животное
+identify(_, unknown) :-           % Если не осталось животных
+    not(can_ask_more), !.
 
-fact(bird,Answer) :-
-    query('Является ли животное птицей?',Answer).
+identify(Animals, Result) :-
+    select_question(Animals, Question),
+    ask(Question, Reply),
+    update_animals(Animals, Question, Reply, UpdatedAnimals),
+    identify(UpdatedAnimals, Result).
 
-fact(aquatic,Answer) :-
-    query('Живет ли животное в воде?',Answer).
+select_question(Animals, Question) :-
+    question(Fact, Q),
+    not(asked(Fact, _)),
+    is_relevant(Fact, Animals),
+    Question = question(Fact, Q),
+    !.
 
-fact(predator,Answer) :-
-    query('Является ли животное хищником?',Answer).
+is_relevant(Fact, Animals) :-
+    findall(Val, (member(A, Animals), animal(A, Traits), member(Fact-Val, Traits)), Vals),
+    list_to_set(Vals, UniqueVals),
+    length(UniqueVals, Length),
+    Length > 1.
 
-fact(fur,Answer):-
-    query('Есть ли у животного шерсть?',Answer).
+ask(question(Fact, Text), Reply) :-
+    (   asked(Fact, Reply) -> true
+    ;   nl, write(Text), write(' (y/n)? '),
+        read(Reply),
+        assert(asked(Fact, Reply))
+    ).
 
-fact(domestic,Answer):-
-    query('Является ли животное домащним?',Answer).
+update_animals(Animals, question(Fact, _), Reply, UpdatedAnimals) :-
+    include(is_match(Fact, Reply), Animals, UpdatedAnimals).
 
-fact(strip,Answer):-
-	query('Есть ли у животного полоски?',Answer).
+is_match(Fact, Reply, Animal) :-
+    animal(Animal, Traits),
+    member(Fact-Val, Traits),
+    match_reply(Reply, Val).
 
+match_reply(y, yes).
+match_reply(n, no).
 
-animal(lion) :-
-    fact(mamals,y),
-    fact(predator,y),
-    fact(fur,y),
-    fact(aquatic,n),
-    fact(bird,n),
-    fact(domestic,n),
-    fact(strip,n).
+respond(unknown) :-
+    write('Не могу определить животное на основе данных ответов.'), nl.
 
-animal(tiger) :-
-    fact(mamals,y),
-    fact(predator,y),
-    fact(fur,y),
-    fact(aquatic,n),
-    fact(bird,n),
-    fact(strip,y),
-    fact(domestic,n).
+respond(Animal) :-
+    write('Думаю, это '), write(Animal), write('.'), nl.
 
-animal(whale) :-
-    fact(mamals,y),
-    fact(strip,n),
-    fact(aquatic,y),
-    fact(predator,y),
-    fact(fur,n),
-    fact(bird,n),
-    fact(domestic,n).
+can_ask_more :-
+    question(Fact, _),
+    not(asked(Fact, _)),
+    !.
 
-animal(dolphin) :-
-    fact(mamals,y),
-    fact(aquatic,y),
-    fact(predator,n),
-    fact(fur,n),
-    fact(strip,n),
-    fact(bird,n),
-    fact(domestic,n).
+clear_memory :-
+    retractall(asked(_, _)).
 
-animal(cat):-
-    fact(mamals,y),
-    fact(strip,n),
-    fact(predator,y),
-    fact(fur,y),
-    fact(aquatic,n),
-    fact(bird,n),
-    fact(domestic,y).
-
-
-animal(cat_strip):-
-    fact(mamals,y),
-    fact(strip,y),
-    fact(predator,y),
-    fact(fur,y),
-    fact(aquatic,n),
-    fact(bird,n),
-    fact(domestic,y).
-
-animal(shark):-
-    fact(aquatic,y),
-    fact(predator,y),
-    fact(mamals,n),
-    fact(fur,n),
-    fact(bird,n),
-	fact(strip,n),
-    fact(domestic,n).
-
-animal(goldfish) :-
-    fact(aquatic,y),
-	fact(strip,n),
-    fact(predator,n),
-    fact(mamals,n),
-    fact(fur,n),
-    fact(bird,n),
-    fact(domestic,y).
-
-animal(parrot) :-
-    fact(mamals,n),
-    fact(bird,y),
-	fact(strip,y),
-	fact(strip,n),
-    fact(aquatic,n),
-    fact(predator,n),
-    fact(fur,n),
-    fact(domestic,y).
-
-animal(penguin) :-
-    fact(mamals,n),
-    fact(bird,y),
-	fact(strip,n),
-    fact(aquatic,y),
-    fact(predator,n),
-    fact(fur,n),
-    fact(domestic,n).
-
-animal(cow) :-
-    fact(mamals,y),
-	fact(strip,n),
-    fact(bird,n),
-    fact(aquatic,n),
-    fact(predator,n),
-    fact(fur,y),
-    fact(domestic,y).
-
-animal(bear) :-
-    fact(mamals,y),
-    fact(bird,n),
-    fact(aquatic,n),
-    fact(predator,y),
-    fact(fur,y),
-	fact(strip,n),
-    fact(domestic,n).
-
-animal(wolf) :-
-    fact(mamals,y),
-    fact(bird,n),
-    fact(aquatic,n),
-    fact(predator,y),
-    fact(fur,y),
-    fact(strip,n),
-    fact(domestic,n).
-
-animal(horse) :-
-    fact(mamals,y),
-    fact(bird,n),
-    fact(aquatic,n),
-    fact(predator,n),
-    fact(fur,y),
-    fact(strip,n),
-    fact(domestic,y).
-
-animal(zebra) :-
-    fact(mamals,y),
-    fact(bird,n),
-    fact(aquatic,n),
-    fact(predator,n),
-    fact(fur,y),
-    fact(strip,y),
-    fact(domestic,n).
-
-animal(elephant) :-
-    fact(mamals,y),
-    fact(bird,n),
-    fact(aquatic,n),
-    fact(predator,n),
-    fact(fur,n),
-    fact(strip,n),
-    fact(domestic,n).
-
-animal(crocodile) :-
-    fact(mamals,n),
-    fact(bird,n),
-    fact(strip,n),
-    fact(aquatic,y),
-    fact(predator,y),
-    fact(fur,n),
-    fact(domestic,n).
-
-animal(eagle) :-
-    fact(mamals,n),
-    fact(strip,n),
-    fact(bird,y),
-    fact(aquatic,n),
-    fact(predator,y),
-    fact(fur,n),
-    fact(domestic,n).
-
-animal(snake) :-
-    fact(mamals,n),
-    fact(bird,n),
-    fact(aquatic,n),
-    fact(predator,y),
-    fact(fur,n),
-    fact(strip,n),
-    fact(domestic,n).
-
-query(Prompt,Answer) :-
-    (   asked(Prompt, Reply) -> true
-    ;   nl, write(Prompt), write(' (y/n)? '),
-        read(X),(X = y -> Reply = y ; Reply = n),
-	assert(asked(Prompt, Reply))
-    ),
-    Reply = Answer.
-
-
-
-
-
-
-
-
-
-
+% Запустить главный цикл
+start :-
+    main.
