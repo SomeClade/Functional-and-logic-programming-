@@ -3,7 +3,7 @@
 max(X, Y, U, Z) :-
     TempMax is max(X, max(Y, U)),
     Z = TempMax.
-%Ôàêòîðèàë ðåêóðñèÿ âíèç +N,-X
+%Ð¤Ð°ÐºÑ‚Ð¾Ñ€Ð¸Ð°Ð» Ñ€ÐµÐºÑƒÑ€ÑÐ¸Ñ Ð²Ð½Ð¸Ð· +N,-X
 
 fact_down(0, 1).
 fact_down(N, X) :-
@@ -12,7 +12,7 @@ fact_down(N, X) :-
     fact_down(N1, X1),
     X is N * X1.
 
-%Ðåêóðñèÿ ââåðõ +N,-X
+%Ð ÐµÐºÑƒÑ€ÑÐ¸Ñ Ð²Ð²ÐµÑ€Ñ… +N,-X
 fact_up(N, X) :- fact_up_helper(N, 1, X).
 
 fact_up_helper(0, Acc, Acc).
@@ -21,7 +21,7 @@ fact_up_helper(N, Acc, X) :-
     N1 is N - 1,
     Acc1 is N * Acc,
     fact_up_helper(N1, Acc1, X).
-%Ñóììà öèôð ÷èñëà ðåêóðñèÿ ââåðõ +Number,-Sum
+%Ð¡ÑƒÐ¼Ð¼Ð° Ñ†Ð¸Ñ„Ñ€ Ñ‡Ð¸ÑÐ»Ð° Ñ€ÐµÐºÑƒÑ€ÑÐ¸Ñ Ð²Ð²ÐµÑ€Ñ… +Number,-Sum
 
 sum_digits_up(0, 0).
 sum_digits_up(Number, Sum) :-
@@ -31,7 +31,7 @@ sum_digits_up(Number, Sum) :-
     sum_digits_up(NextNumber, PartialSum),
     Sum is PartialSum + Digit.
 
-%%Ñóììà öèôð ÷èñëà ðåêóðñèÿ âíèç +Number,-Sum
+%%Ð¡ÑƒÐ¼Ð¼Ð° Ñ†Ð¸Ñ„Ñ€ Ñ‡Ð¸ÑÐ»Ð° Ñ€ÐµÐºÑƒÑ€ÑÐ¸Ñ Ð²Ð½Ð¸Ð· +Number,-Sum
 
 sum_digits_down(Number, Sum) :- sum_digits_down_helper(Number, 0, Sum).
 
@@ -42,3 +42,10 @@ sum_digits_down_helper(Number, Acc, Sum) :-
     Digit is Number mod 10,
     NewAcc is Acc + Digit,
     sum_digits_down_helper(NextNumber, NewAcc, Sum).
+
+%Ð§Ð¸ÑÐ»Ð¾ ÑÐ²Ð¾Ð±Ð¾Ð´Ð½Ð¾Ðµ Ð¾Ñ‚ ÐºÐ²Ð°Ð´Ñ€Ð°Ñ‚Ð¾Ð² +N
+
+is_square_free(1).
+is_square_free(N) :-
+    N > 1,
+    \+ (between(2, N, X), 0 is N mod X^2).
