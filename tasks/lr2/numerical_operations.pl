@@ -50,7 +50,6 @@ is_square_free(N) :-
     N > 1,
     \+ (between(2, N, X), 0 is N mod X^2).
 
-
 %Предикаты чтения списка с клавиатуры read_list -List и вывода списка на экран write_list +List
 
 read_list(List) :-
