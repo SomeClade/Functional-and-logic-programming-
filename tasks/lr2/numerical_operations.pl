@@ -65,3 +65,19 @@ write_list([]).
 write_list([Head|Tail]) :-
     write(Head), nl,
     write_list(Tail).
+
+% сумма списка рекурсия вниз +List, ?Sum
+
+sum_list_down(List, Sum) :- sum_list_down_helper(List, 0, Sum).
+
+sum_list_down_helper([], Acc, Acc).
+sum_list_down_helper([Head|Tail], Acc, Sum) :-
+    NewAcc is Acc + Head,
+    sum_list_down_helper(Tail, NewAcc, Sum).
+
+%сумма списка рекурсия вверх +List, ?Sum
+
+sum_list_up([], 0).
+sum_list_up([Head|Tail], Sum) :-
+    sum_list_up(Tail, TailSum),
+    Sum is Head + TailSum.
