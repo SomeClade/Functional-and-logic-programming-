@@ -81,3 +81,12 @@ sum_list_up([], 0).
 sum_list_up([Head|Tail], Sum) :-
     sum_list_up(Tail, TailSum),
     Sum is Head + TailSum.
+
+%Удаление элементов, сумма цифр которых равна данной  +List,+Sum,-Result
+
+remove_items_with_digit_sum(List, Sum, Result) :-
+    exclude(has_digit_sum(Sum), List, Result).
+
+has_digit_sum(Sum, Item) :-
+    sum_digits_up(Item, ItemSum),
+    ItemSum =:= Sum.
