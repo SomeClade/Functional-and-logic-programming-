@@ -49,3 +49,20 @@ is_square_free(1).
 is_square_free(N) :-
     N > 1,
     \+ (between(2, N, X), 0 is N mod X^2).
+
+
+%Предикаты чтения списка с клавиатуры read_list -List и вывода списка на экран write_list +List
+
+read_list(List) :-
+    write('Enter elements, end with "end".: '), nl,
+    read_line(List).
+
+read_line([X|List]) :-
+    read(X), X \= end,
+    !, read_line(List).
+read_line([]).
+
+write_list([]).
+write_list([Head|Tail]) :-
+    write(Head), nl,
+    write_list(Tail).
