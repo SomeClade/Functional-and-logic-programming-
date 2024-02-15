@@ -24,3 +24,4 @@ max_digit_up(Number, Acc, MaxDigit) :-
     NewAcc is max(Acc, NextDigit),
     NextNumber is Number // 10,
     max_digit_up(NextNumber, NewAcc, MaxDigit).
+
