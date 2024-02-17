@@ -25,3 +25,16 @@ max_digit_up(Number, Acc, MaxDigit) :-
     NextNumber is Number // 10,
     max_digit_up(NextNumber, NewAcc, MaxDigit).
 
+% min_odd_digit_down +Number, -MinOddDigit
+% Number - число, MinOddDigit - минимальная нечетная цифра числа.
+min_odd_digit_down(Number, MinOddDigit) :- min_odd_digit_down(Number, -1, MinOddDigit).
+
+% Вспомогательный предикат с аккумулятором
+min_odd_digit_down(0, CurrentMin, CurrentMin) :- CurrentMin >= 0, !.
+min_odd_digit_down(0, _, -1) :- !.  % Если не найдено нечетных цифр
+min_odd_digit_down(Number, CurrentMin, MinOddDigit) :-
+    Number > 0,
+    NextDigit is Number mod 10,
+    NextNumber is Number // 10,
+    (NextDigit mod 2 =:= 1 -> NewMin = min(CurrentMin, NextDigit); NewMin = CurrentMin),
+    min_odd_digit_down(NextNumber, NewMin, MinOddDigit).
