@@ -60,3 +60,11 @@ min_odd_digit_up_helper(Number, Acc, MinOddDigit) :-
         (Acc = -1 -> NewAcc = NextDigit; NewAcc = min(Acc, NextDigit))  % и аккумулятор не инициализирован, обновляем его.
     ;   NewAcc = Acc),  % Иначе сохраняем текущее значение аккумулятора.
     min_odd_digit_up_helper(NextNumber, NewAcc, MinOddDigit).
+
+% gcd_down +A, +B, -GCD (алгоритм Эвклида)
+% A, B - числа, для которых нужно найти НОД, GCD - наибольший общий делитель.
+gcd_down(A, 0, A) :- !.
+gcd_down(A, B, GCD) :-
+    B > 0,
+    Remainder is A mod B,
+    gcd_down(B, Remainder, GCD).
