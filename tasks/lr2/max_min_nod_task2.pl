@@ -68,3 +68,26 @@ gcd_down(A, B, GCD) :-
     B > 0,
     Remainder is A mod B,
     gcd_down(B, Remainder, GCD).
+
+
+% НОД рекурсия вверх  gcd_up +A, +B, -GCD
+% Инициализирующий предикат, который просто запускает рекурсивный процесс
+gcd_up(A, B, GCD) :-
+    gcd_up_helper(A, B, 1, GCD).
+
+% Вспомогательный предикат с "аккумулятором", который здесь используется для передачи текущего НОД "вверх" по рекурсии
+% A и B - числа, для которых ищем НОД
+% CurrentGCD - текущий НОД, который изначально устанавливается в 1
+% GCD - итоговый НОД, который будет возвращен
+gcd_up_helper(0, B, CurrentGCD, GCD) :-
+    !, GCD is max(CurrentGCD, B).
+gcd_up_helper(A, 0, CurrentGCD, GCD) :-
+    !, GCD is max(CurrentGCD, A).
+gcd_up_helper(A, B, CurrentGCD, GCD) :-
+    A >= B,
+    A1 is A - B,
+    gcd_up_helper(A1, B, CurrentGCD, GCD).
+gcd_up_helper(A, B, CurrentGCD, GCD) :-
+    B > A,
+    gcd_up_helper(A, B - A, CurrentGCD, GCD).
+
