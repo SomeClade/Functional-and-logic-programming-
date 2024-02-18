@@ -32,3 +32,17 @@ find_missing_numbers(List, Missing) :-
     max_list(List, Max),
     numlist(Min, Max, FullRange),
     findall(Num, (member(Num, FullRange), \+ member(Num, List)), Missing).
+
+
+% Элементы между максимальнымыи (+List, -Elements)
+% List - входной список, Elements - список элементов между первым и последним максимальным
+elements_between_maxes(List, Elements) :-
+    max_list(List, Max),
+    prefix_suffix(Max, List, Prefix, Suffix),
+    reverse(Prefix, RevPrefix),
+    prefix_suffix(Max, RevPrefix, _, [_|BetweenRev]),
+    reverse(BetweenRev, Elements).
+
+% Находит префикс и суффикс списка относительно первого вхождения элемента
+prefix_suffix(Element, List, Prefix, Suffix) :-
+    append(Prefix, [Element|Suffix], List), !.
