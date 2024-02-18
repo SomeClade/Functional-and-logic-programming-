@@ -42,3 +42,27 @@ gcd(A, B, GCD) :-
 coprime(A, B) :-
     gcd(A, B, GCD),
     GCD =:= 1.
+
+% sum_divisors_coprime +Number, -Sum
+% Number - число, для которого ищем сумму делителей.
+% Sum - сумма делителей, взаимно простых с суммой цифр и не взаимно простых с произведением цифр числа.
+sum_divisors_coprime(Number, Sum) :-
+    sum_digits(Number, SumDigits),
+    prod_digits(Number, ProdDigits),
+    findall(Divisor, (between(1, Number, Divisor), Number mod Divisor =:= 0, coprime(Divisor, SumDigits), \+ coprime(Divisor, ProdDigits)), Divisors),
+%findall/3 — это предикат, который ищет все возможные решения (все значения Divisor), удовлетворяющие заданному условию (Goal), и возвращает список этих решений в переменной Divisors.
+%between(1, Number, Divisor):
+%between/3 генерирует целые числа в диапазоне от 1 до Number (включительно), которые пробуются в качестве кандидатов на роль делителя (Divisor) исходного числа Number.
+%Number mod Divisor =:= 0:
+%Это условие проверяет, что Number делится на Divisor без остатка, то есть Divisor является делителем Number.
+%coprime(Divisor, SumDigits):
+%coprime/2 проверяет, что Divisor и сумма цифр исходного числа (SumDigits) взаимно просты
+%\+ coprime(Divisor, ProdDigits):
+%\+ Это условие проверяет, что Divisor и произведение цифр исходного числа (ProdDigits)
+    sum_list(Divisors, Sum).
+
+%Вывод результата
+write_sum(Sum) :-
+    write('Сумма искомых делителей: '), write(Sum), nl.
+
+
