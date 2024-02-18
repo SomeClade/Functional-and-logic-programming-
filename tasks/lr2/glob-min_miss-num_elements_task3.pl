@@ -23,3 +23,12 @@ is_global_minimum(List, Index, Result) :-
     nth0(Index, List, Element),  % Получаем элемент по индексу
     min_list(List, Min),  % Находим минимальный элемент в списке
     (Element =:= Min -> Result = yes; Result = no).  % Сравниваем элемент с минимальным
+
+
+% поиск пропущенных чисел +List, -Missing
+% List - входной список, Missing - список пропущенных чисел
+find_missing_numbers(List, Missing) :-
+    min_list(List, Min),
+    max_list(List, Max),
+    numlist(Min, Max, FullRange),
+    findall(Num, (member(Num, FullRange), \+ member(Num, List)), Missing).
