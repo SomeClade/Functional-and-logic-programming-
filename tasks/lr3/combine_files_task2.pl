@@ -70,9 +70,39 @@ print_lines_with_more_a_than_average(FileName) :-
     include(lambda(Line, (count_a_in_string(Line, Count), Count > Average)), Lines, FilteredLines),
     maplist(writeln, FilteredLines).
 
+% Разбиваем строку на слова
+split_string_into_words(Str, Words) :-
+    split_string(Str, " ", "", Words).
+
+% Находим самое частое слово
+most_frequent_word(FileName, Word) :-
+    read_lines_from_file(FileName, Lines),
+    maplist(split_string_into_words, Lines, WordsList),
+    flatten(WordsList, AllWords),
+    msort(AllWords, SortedWords),
+    pack(SortedWords, PackedWords),
+    max_member_by_length(PackedWords, MostFrequent),
+    nth0(0, MostFrequent, Word).
+
+pack([], []).
+pack([X|Xs], [[X|Zs]|Zss]) :-
+    take_while(X, Xs, Zs, Ys),
+    pack(Ys, Zss).
+
+take_while(X, [Y|Ys], [Y|Zs], Rest) :-
+    X == Y, !,
+    take_while(X, Ys, Zs, Rest).
+take_while(_, Rest, [], Rest).
+
+max_member_by_length(Lists, Max) :-
+    map_list_to_pairs(length, Lists, Pairs),
+    keysort(Pairs, Sorted),
+    last(Sorted, _-Max).
+
 
 
 % Пример вызова
+% :- print_lines_with_more_a_than_average('file.txt')
 % :- print_max_line_length('file.txt').
 % :- print_lines_without_spaces('file.txt').
 % :- print_lines_with_more_a_than_average('file.txt').
