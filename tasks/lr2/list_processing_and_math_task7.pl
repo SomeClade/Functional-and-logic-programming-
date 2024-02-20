@@ -14,3 +14,9 @@ sum_abs([H|T], Sum, Count) :-
 
 write_average_abs(Average) :-
     write('Среднее арифметическое модулей элементов: '), write(Average), nl.
+
+% sum_in_range(+List, +A, +B, -Sum)
+% List - входной список чисел, A и B - границы интервала, Sum - сумма элементов в этом интервале.
+sum_in_range(List, A, B, Sum) :-
+    include(between(A, B), List, FilteredList),
+    sum_list(FilteredList, Sum).
