@@ -27,3 +27,12 @@ write_lines(Stream, [Line|Tail]) :-
     writeln(Stream, Line),
     write_lines(Stream, Tail).
 
+% Задача 1: Длина наибольшей строки
+max_line_length(Lines, MaxLength) :-
+    maplist(string_length, Lines, Lengths),
+    max_list(Lengths, MaxLength).
+
+
+% Пример вызова
+% :- print_max_line_length('your_file.txt').
+
