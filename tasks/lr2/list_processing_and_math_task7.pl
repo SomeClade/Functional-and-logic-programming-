@@ -28,3 +28,14 @@ unique_elements(List1, List2, UniqueList) :-
     findall(X, (member(X, List2), \+ member(X, List1)), Unique2),
     append(Unique1, Unique2, UniqueList).
 
+% squares_less_than_100_repeated(+List, -ResultList)
+% List - входной список чисел, ResultList - список квадратов чисел, удовлетворяющих условиям.
+squares_less_than_100_repeated(List, ResultList) :-
+    findall(X^2, (member(X, List), X >= 0, X < 10, count(X, List, Count), Count > 2), ResultList).
+
+% count(+Element, +List, -Count)
+% Вспомогательный предикат для подсчета количества вхождений элемента в список.
+count(Element, List, Count) :-
+    include(==(Element), List, FilteredList),
+    length(FilteredList, Count).
+
