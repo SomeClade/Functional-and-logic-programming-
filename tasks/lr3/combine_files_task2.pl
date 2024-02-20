@@ -48,7 +48,31 @@ print_lines_without_spaces(FileName) :-
     lines_without_spaces(Lines, Count),
     format('Lines without spaces: ~w~n', [Count]).
 
+% Считаем количество 'A' в строке
+count_a_in_string(Str, Count) :-
+    sub_string(Str, _, 1, _, 'A'),
+    sub_string(Str, 1, _, 0, SubStr),
+    count_a_in_string(SubStr, TailCount),
+    Count is TailCount + 1.
+count_a_in_string(_, 0).
+
+% Находим среднее количество 'A' в списке строк
+average_a_in_lines(Lines, Average) :-
+    maplist(count_a_in_string, Lines, Counts),
+    sum_list(Counts, Total),
+    length(Lines, NumLines),
+    Average is Total / NumLines.
+
+% Выводим строки с количеством 'A' выше среднего
+print_lines_with_more_a_than_average(FileName) :-
+    read_lines_from_file(FileName, Lines),
+    average_a_in_lines(Lines, Average),
+    include(lambda(Line, (count_a_in_string(Line, Count), Count > Average)), Lines, FilteredLines),
+    maplist(writeln, FilteredLines).
+
+
 
 % Пример вызова
 % :- print_max_line_length('file.txt').
 % :- print_lines_without_spaces('file.txt').
+% :- print_lines_with_more_a_than_average('file.txt').
