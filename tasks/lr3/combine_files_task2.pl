@@ -99,6 +99,23 @@ max_member_by_length(Lists, Max) :-
     keysort(Pairs, Sorted),
     last(Sorted, _-Max).
 
+% Вывод уникальных строк
+write_unique_lines_to_file(InputFileName, OutputFileName) :-
+    read_lines_from_file(InputFileName, Lines),
+    maplist(split_string_into_words, Lines, WordsLists),
+    flatten(WordsLists, AllWords),
+    findall(Word, (member(Word, AllWords), count(Word, AllWords, 1)), UniqueWords),
+    include(lambda(Line, line_is_unique(Line, UniqueWords)), Lines, UniqueLines),
+    write_lines_to_file(OutputFileName, UniqueLines).
+
+line_is_unique(Line, UniqueWords) :-
+    split_string_into_words(Line, Words),
+    intersection(Words, UniqueWords, Words) -> true ; false.
+
+count(_, [], 0).
+count(X, [Y|T], N) :-
+    count(X, T, N1),
+    (X == Y -> N is N1 + 1; N = N1).
 
 
 % Пример вызова
