@@ -20,3 +20,11 @@ write_average_abs(Average) :-
 sum_in_range(List, A, B, Sum) :-
     include(between(A, B), List, FilteredList),
     sum_list(FilteredList, Sum).
+
+% unique_elements(+List1, +List2, -UniqueList)
+% List1 и List2 - входные списки, UniqueList - список уникальных элементов.
+unique_elements(List1, List2, UniqueList) :-
+    findall(X, (member(X, List1), \+ member(X, List2)), Unique1),
+    findall(X, (member(X, List2), \+ member(X, List1)), Unique2),
+    append(Unique1, Unique2, UniqueList).
+
