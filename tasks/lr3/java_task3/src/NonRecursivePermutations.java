@@ -3,14 +3,13 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class NonRecursivePermutations {
-    // Вспомогательная функция для обмена элементов
     private static void swap(char[] arr, int i, int j) {
         char temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
     }
 
-    // Вспомогательная функция для реверса от i до j
+    //  функция для реверса от i до j
     private static void reverse(char[] arr, int i, int j) {
         while (i < j) {
             swap(arr, i++, j--);

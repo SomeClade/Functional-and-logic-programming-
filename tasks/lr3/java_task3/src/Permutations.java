@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Permutations {
-    // Рекурсивный метод для создания перестановок
     public static void permute(List<Character> out, List<Character> in, FileWriter writer) throws IOException {
         if (in.isEmpty()) {
             for (char c : out) {

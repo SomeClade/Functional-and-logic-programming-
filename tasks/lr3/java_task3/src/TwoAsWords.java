@@ -2,7 +2,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class TwoAsWords {
-    // Рекурсивная функция для создания слов
     public static void generateWords(int n, String current, int countA, FileWriter writer) throws IOException {
         if (current.length() == n) {
             if (countA == 2) {

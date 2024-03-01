@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class CombinationsWithRepetition {
-    // Рекурсивная функция для создания сочетаний с повторениями
     public static void combinationsWithRepetition(int n, int k, int start, int[] combination, FileWriter writer) throws IOException {
         if (k == 0) {
             for (int i = 0; i < combination.length; i++) {

@@ -2,7 +2,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class SpecialWords {
-    // Генерация слов по заданным условиям
     public static void generateSpecialWords(String current, int doubleLetter, int tripleLetter, FileWriter writer) throws IOException {
         if (current.length() == 7) {
             writer.write(current + "\n");
