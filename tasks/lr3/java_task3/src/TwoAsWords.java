@@ -6,7 +6,7 @@ public class TwoAsWords {
         if (current.length() == n) {
             if (countA == 2) {
                 writer.write(current);
-                writer.write('\n');
+                writer.write(   '\n');
             }
             return;
         }

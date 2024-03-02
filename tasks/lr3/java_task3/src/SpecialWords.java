@@ -1,29 +1,67 @@
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SpecialWords {
-    public static void generateSpecialWords(String current, int doubleLetter, int tripleLetter, FileWriter writer) throws IOException {
-        if (current.length() == 7) {
-            writer.write(current + "\n");
+
+    public static void generateWords(String currentWord, Set<Character> usedChars, int doubleLetterCount, int tripleLetterCount, BufferedWriter writer) throws IOException {
+// Проверяем, достигли ли мы слова длиной 7 букв
+        if (currentWord.length() == 7) {
+            if (doubleLetterCount == 1 && tripleLetterCount == 1) {
+                writer.write(currentWord);
+                writer.newLine();
+            }
             return;
         }
-        for (char c = 'a'; c <= 'z'; c++) {
-            int count = countLetter(current, c);
-            if ((count == 2 && doubleLetter < 1) || (count == 3 && tripleLetter < 1) || count == 0) {
-                generateSpecialWords(current + c, doubleLetter + (count == 2 ? 1 : 0), tripleLetter + (count == 3 ? 1 : 0), writer);
+
+        for (char ch = 'a'; ch <= 'z'; ch++) {
+            int newDoubleLetterCount = doubleLetterCount;
+            int newTripleLetterCount = tripleLetterCount;
+            int count = countLetter(currentWord, ch);
+
+            if (count == 2) {
+                continue;
+            } else if (count == 1) {
+                if (doubleLetterCount == 0) {
+                    newDoubleLetterCount = 1;
+                } else {
+                    continue;
+                }
+            } else if (count == 0) {
+                if (usedChars.contains(ch)) {
+                    continue;
+                }
+            } else if (count == 3) {
+                continue;
+            } else if (count == 2 && tripleLetterCount == 0) {
+                newTripleLetterCount = 1;
             }
+
+            Set<Character> newUsedChars = new HashSet<>(usedChars);
+            if (count == 0) {
+                newUsedChars.add(ch);
+            }
+            generateWords(currentWord + ch, newUsedChars, newDoubleLetterCount, newTripleLetterCount, writer);
         }
     }
 
-    private static int countLetter(String str, char letter) {
-        return (int) str.chars().filter(ch -> ch == letter).count();
+    private static int countLetter(String word, char letter) {
+        int count = 0;
+        for (int i = 0; i < word.length(); i++) {
+            if (word.charAt(i) == letter) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public static void main(String[] args) {
-        try (FileWriter writer = new FileWriter("special_words.txt")) {
-            generateSpecialWords("", 0, 0, writer);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("RecursiveSpecialWords.txt"))) {
+            generateWords("", new HashSet<>(), 0, 0, writer);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 }
