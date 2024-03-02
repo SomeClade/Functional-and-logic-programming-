@@ -14,3 +14,24 @@ fail % Используем backtracking для поиска всех перестановок
 close(Stream).
 
 %пример вызова generate_permutations([1, 2, 3], 'permutations.txt')
+
+
+% combination_with_repetition(+N, +K, +Elements, -Combination)
+combination_with_repetition(_, 0, _, []).
+combination_with_repetition(N, K, Elements, [H|T]) :-
+K > 0,
+nth1(Index, Elements, H), Index =< N,
+K1 is K - 1,
+combination_with_repetition(N, K1, Elements, T).
+
+% generate_combinations_with_repetition(+N, +K, +Elements, +Filename)
+generate_combinations_with_repetition(N, K, Elements, Filename) :-
+open(Filename, write, Stream),
+( combination_with_repetition(N, K, Elements, Comb),
+write(Stream, Comb), write(Stream, '\n'),
+fail
+; true
+),
+close(Stream).
+
+%Пример вызова: `generate_combinations_with_repetition(3, 2, ['a', 'b', 'c'], 'combinations.txt').`
