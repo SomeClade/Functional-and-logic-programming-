@@ -35,3 +35,39 @@ fail
 close(Stream).
 
 %Пример вызова: `generate_combinations_with_repetition(3, 2, ['a', 'b', 'c'], 'combinations.txt').`
+
+% Генерация всех комбинаций слов и запись их в файл
+generate_double_letter_words(Filename) :-
+open(Filename, write, Stream),
+alphabet(Alphabet),
+findall(Word, (combination(5, Alphabet, Word), valid_double_letter_word(Word)), Words),
+write_list_to_stream(Words, Stream),
+close(Stream).
+
+% Предикат для проверки, что слово содержит ровно одну букву, повторяющуюся два раза
+valid_double_letter_word(Word) :-
+sort(Word, Sorted),
+length(Sorted, 4), % Должно быть 4 уникальных символа, если один повторяется дважды
+msort(Word, Msorted),
+Word == Msorted.
+
+% Генерация всех комбинаций заданной длины
+combination(0, _, []) :- !.
+combination(Len, Alphabet, [H|T]) :-
+Len > 0,
+member(H, Alphabet),
+Len1 is Len - 1,
+combination(Len1, Alphabet, T).
+
+% Запись списка списков в поток
+write_list_to_stream([], _).
+write_list_to_stream([H|T], Stream) :-
+atomic_list_concat(H, '', Atom), % Преобразовать список символов в строку
+write(Stream, Atom), write(Stream, '\n'),
+write_list_to_stream(T, Stream).
+
+% Алфавит для генерации слов
+alphabet(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']).
+
+% Пример вызова generate_double_letter_words('double_letter_words.txt').
