@@ -1,6 +1,6 @@
 :- dynamic asked/2.
 
-% Животные и их характеристики
+% Р–РёРІРѕС‚РЅС‹Рµ Рё РёС… С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё
 animal(lion, [mammal-yes, aquatic-no, predator-yes, fur-yes, domestic-no, stripes-no]).
 animal(tiger, [mammal-yes, aquatic-no, predator-yes, fur-yes, domestic-no, stripes-yes]).
 animal(whale, [mammal-yes, aquatic-yes, predator-no, fur-no, domestic-no, stripes-no]).
@@ -9,15 +9,15 @@ animal(cat, [mammal-yes, aquatic-no, predator-yes, fur-yes, domestic-yes, stripe
 animal(goldfish, [mammal-no, aquatic-yes, predator-no, fur-no, domestic-yes, stripes-no]).
 animal(shark, [mammal-no, aquatic-yes, predator-yes, fur-no, domestic-no, stripes-no]).
 
-% Вопросы для определения животного
-question(mammal, 'Является ли животное млекопитающим?').
-question(aquatic, 'Живет ли животное в воде?').
-question(predator, 'Является ли животное хищником?').
-question(fur, 'Есть ли у животного шерсть?').
-question(domestic, 'Является ли животное домашним?').
-question(stripes, 'Есть ли у животного полосы?').
+% Р’РѕРїСЂРѕСЃС‹ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ Р¶РёРІРѕС‚РЅРѕРіРѕ
+question(mammal, 'РЇРІР»СЏРµС‚СЃСЏ Р»Рё Р¶РёРІРѕС‚РЅРѕРµ РјР»РµРєРѕРїРёС‚Р°СЋС‰РёРј?').
+question(aquatic, 'Р–РёРІРµС‚ Р»Рё Р¶РёРІРѕС‚РЅРѕРµ РІ РІРѕРґРµ?').
+question(predator, 'РЇРІР»СЏРµС‚СЃСЏ Р»Рё Р¶РёРІРѕС‚РЅРѕРµ С…РёС‰РЅРёРєРѕРј?').
+question(fur, 'Р•СЃС‚СЊ Р»Рё Сѓ Р¶РёРІРѕС‚РЅРѕРіРѕ С€РµСЂСЃС‚СЊ?').
+question(domestic, 'РЇРІР»СЏРµС‚СЃСЏ Р»Рё Р¶РёРІРѕС‚РЅРѕРµ РґРѕРјР°С€РЅРёРј?').
+question(stripes, 'Р•СЃС‚СЊ Р»Рё Сѓ Р¶РёРІРѕС‚РЅРѕРіРѕ РїРѕР»РѕСЃС‹?').
 
-% Главный цикл
+% Р“Р»Р°РІРЅС‹Р№ С†РёРєР»
 main :-
     retractall(asked(_,_)),
     findall(A, animal(A, _), Animals),
@@ -25,8 +25,10 @@ main :-
     respond(Result),
     clear_memory.
 
-identify([Animal], Animal) :- !.  % Если осталось одно животное
-identify(_, unknown) :-           % Если не осталось животных
+% РРґРµРЅС‚РёС„РёРєР°С†РёСЏ Р¶РёРІРѕС‚РЅРѕРіРѕ
+% identify(+Animals, -Result)
+identify([Animal], Animal) :- !.  % Р•СЃР»Рё РѕСЃС‚Р°Р»РѕСЃСЊ РѕРґРЅРѕ Р¶РёРІРѕС‚РЅРѕРµ
+identify(_, unknown) :-           % Р•СЃР»Рё РЅРµ РѕСЃС‚Р°Р»РѕСЃСЊ Р¶РёРІРѕС‚РЅС‹С…
     not(can_ask_more), !.
 
 identify(Animals, Result) :-
@@ -35,6 +37,7 @@ identify(Animals, Result) :-
     update_animals(Animals, Question, Reply, UpdatedAnimals),
     identify(UpdatedAnimals, Result).
 
+% select_question(+Animals, -Question)
 select_question(Animals, Question) :-
     question(Fact, Q),
     not(asked(Fact, _)),
@@ -42,12 +45,14 @@ select_question(Animals, Question) :-
     Question = question(Fact, Q),
     !.
 
+% is_relevant(+Fact, +Animals)
 is_relevant(Fact, Animals) :-
     findall(Val, (member(A, Animals), animal(A, Traits), member(Fact-Val, Traits)), Vals),
     list_to_set(Vals, UniqueVals),
     length(UniqueVals, Length),
     Length > 1.
 
+% ask(+Question, -Reply)
 ask(question(Fact, Text), Reply) :-
     (   asked(Fact, Reply) -> true
     ;   nl, write(Text), write(' (y/n)? '),
@@ -55,9 +60,12 @@ ask(question(Fact, Text), Reply) :-
         assert(asked(Fact, Reply))
     ).
 
+% update_animals(+Animals, +Question, +Reply, -UpdatedAnimals)
 update_animals(Animals, question(Fact, _), Reply, UpdatedAnimals) :-
     include(is_match(Fact, Reply), Animals, UpdatedAnimals).
 
+
+% is_match(+Fact, +Reply, +Animal)
 is_match(Fact, Reply, Animal) :-
     animal(Animal, Traits),
     member(Fact-Val, Traits),
@@ -66,11 +74,13 @@ is_match(Fact, Reply, Animal) :-
 match_reply(y, yes).
 match_reply(n, no).
 
+% respond(+Result)
 respond(unknown) :-
-    write('Не могу определить животное на основе данных ответов.'), nl.
+    write('РќРµ РјРѕРіСѓ РѕРїСЂРµРґРµР»РёС‚СЊ Р¶РёРІРѕС‚РЅРѕРµ РЅР° РѕСЃРЅРѕРІРµ РґР°РЅРЅС‹С… РѕС‚РІРµС‚РѕРІ.'), nl.
+
 
 respond(Animal) :-
-    write('Думаю, это '), write(Animal), write('.'), nl.
+    write('Р”СѓРјР°СЋ, СЌС‚Рѕ '), write(Animal), write('.'), nl.
 
 can_ask_more :-
     question(Fact, _),
@@ -80,6 +90,6 @@ can_ask_more :-
 clear_memory :-
     retractall(asked(_, _)).
 
-% Запустить главный цикл
+% Р—Р°РїСѓСЃС‚РёС‚СЊ РіР»Р°РІРЅС‹Р№ С†РёРєР»
 start :-
     main.

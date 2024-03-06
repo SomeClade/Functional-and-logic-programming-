@@ -91,30 +91,36 @@ father(X, Y) :- man(X), parent(X, Y).
 
 % Определяет, является ли X матерью Y
 mother(X, Y) :- woman(X), parent(X, Y).
-
+% sibling(+X, +Y)
 % Определяет братьев и сестер
 sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
 
+% sister(+X, -Y)
 % Определяет сестер
 sister(X, Y) :- woman(X), sibling(X, Y).
 
-
+% grand_pas(+X)
 % Предикат, который выводит всех дедушек X
-grand_pas(X) :-parent(Z, X),father(Y, Z),print(Y), nl, fail.
+grand_pas(X) :- parent(Z, X), parent(Y, Z), man(Y), print(Y), nl, fail.
 
+% grand_pa(+X, -Y)
 % Предикат, определяющий дедушку
 grand_pa(X, Y) :- man(X), parent(X, Z), parent(Z, Y).
 
+% grand_child(-Y, +X)
 % Предикат, определяющий внучку или внука
-grand_child(Y, X) :- parent(Z, Y), parent(X, Z), (man(Y); woman(Y)).
+grand_child(Y, X) :- parent(Z, Y), parent(X, Z).
 
+% grand_pa_and_da(+X, -Y) или grand_pa_and_da(-X, +Y)
 % Итоговый предикат, проверяющий отношения дедушка и внучки или внучки и дедушки
 grand_pa_and_da(X, Y) :-
     (grand_pa(X, Y), woman(Y));
     (grand_pa(Y, X), woman(X)).
 
+% aunt(+X, -Y)
 % Предикат, который проверяет, является ли X тетей Y
-aunt(X, Y) :-parent(Z, Y),sister(X, Z).
+aunt(X, Y) :- parent(Z, Y), sister(X, Z).
 
+% aunts(+X)
 % Предикат, который выводит всех тетей X
-aunts(X) :-parent(Z, X),sister(Y, Z),print(Y), nl, fail.
+aunts(X) :- parent(Z, X), sister(Y, Z), print(Y), nl, fail.

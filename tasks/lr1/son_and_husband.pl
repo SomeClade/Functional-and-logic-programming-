@@ -48,26 +48,32 @@ parent(duhovlad,zlatomir).
 parent(zhdana,zdislava).
 parent(zhdana,zlatomir).
 
+% men()
+men() :- man(X), print(X), nl, fail.
 
-men():- man(X), print(X), nl, fail.
-women():- woman(X), print(X), nl, fail.
-children(X):- parent(X,Y), print(Y), nl, fail.
+% women()
+women() :- woman(X), print(X), nl, fail.
 
-mother(X,Y):- woman(X), parent(X,Y).
-mother(X):- mother(Y,X), print(Y), nl, fail.
-% проверяет является ли X сыном Y
-sons(X,Y):- parent(Y,X), man(X), print(X), nl, fail.
+% children(+Parent)
+children(X) :- parent(X, Y), print(Y), nl, fail.
 
-% Выводит всех детей Х
-son(X):- parent(X,Y), man(Y), print(Y), nl, fail.
+% mother(+Child, -Mother)
+mother(X, Y) :- woman(X), parent(X, Y).
 
-% проверяет, является ли X мужем Y. check_married() проверяет на наличие
-% общего ребёнка
+% mother(-Mother)
+mother(X) :- mother(Y, X), print(Y), nl, fail.
 
-check_married(X,Y) :- parent(X, Z), parent(Y, Z), X\=Y.
+% sons(+Parent, -Son)
+sons(X, Y) :- parent(X, Y), man(Y), print(Y), nl, fail.
 
-husband(X,Y):- check_married(X,Y),man(X).
+% son(+Parent)
+son(X) :- parent(X, Y), man(Y), print(Y), nl, fail.
 
-% Выводит мужа X
+% check_married(+PersonOne, +PersonTwo)
+check_married(X, Y) :- parent(X, Z), parent(Y, Z), X \= Y.
 
-husband(X):- check_married(Y,X), man(Y).
+% husband(+Wife, -Husband)
+husband(X, Y) :- check_married(Y, X), man(Y).
+
+% husband(+Wife)
+husband(X) :- check_married(Y, X), man(Y), print(Y), nl, fail.
