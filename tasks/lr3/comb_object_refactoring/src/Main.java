@@ -1,6 +1,7 @@
 import CombObjects.*;
 import WindowFrame.MainFrame;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,15 +16,23 @@ public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             MainFrame frame = new MainFrame();
+            frame.OnCombinationButtonPressed = new MainFrame.CombinationPressed() {
+                @Override
+                public void onCombination(int n, int k) {
+                    try (FileWriter writer = new FileWriter("combinations_with_repetition.txt")) {
+                        CombinatorialGenerator generator = new CombinatorialGenerator.CombinationsWithRepetition(n, k);
+                        generator.generate(writer);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    }
+            };
             frame.setVisible(true);
+            frame.getContentPane().setLayout(new FlowLayout());
+
         });
 
-        try (FileWriter writer = new FileWriter("combinations_with_repetition.txt")) {
-            CombinatorialGenerator generator = new CombinatorialGenerator.CombinationsWithRepetition(3, 2);
-            generator.generate(writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
         try (FileWriter writer = new FileWriter("non_recursive_combinations.txt")) {
             CombinatorialGenerator generator = new CombinatorialGenerator.NonRecursiveCombinations(3, 2);
