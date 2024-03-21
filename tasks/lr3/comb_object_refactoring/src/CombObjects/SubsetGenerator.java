@@ -55,7 +55,7 @@ public abstract class SubsetGenerator {
         @Override
         public List<List<Integer>> generateSubsets() {
             List<List<Integer>> result = new ArrayList<>();
-            result.add(new ArrayList<>()); // Start with the empty set
+            result.add(new ArrayList<>());
 
             for (int num : nums) {
                 int n = result.size();

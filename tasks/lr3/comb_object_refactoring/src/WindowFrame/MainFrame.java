@@ -8,60 +8,85 @@ import java.nio.file.Paths;
 import java.io.IOException;
 
 public class MainFrame extends JFrame {
-    private final JTextField textFieldCombinationsN;
-    private final JTextField textFieldCombinationsK;
+    private final JTextField textFieldN;
+    private final JTextField textFieldK;
     private final JTextArea textAreaResults;
-    public CombinationPressed OnCombinationButtonPressed;
 
     public interface CombinationPressed {
-        void onCombination(int n, int k);
+        void onCombination(int n, int k, String method);
     }
 
+    public CombinationPressed onCombinationButtonPressed;
+
     public MainFrame() {
-        setTitle("Main Window");
-        setSize(400, 300); // Размер окна
+        setTitle("Combinatorial Generator");
+        setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new FlowLayout());
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new FlowLayout());
 
         JLabel labelN = new JLabel("Enter N:");
-        textFieldCombinationsN = new JTextField(5);
+        textFieldN = new JTextField(5);
         JLabel labelK = new JLabel("Enter K:");
-        textFieldCombinationsK = new JTextField(5);
+        textFieldK = new JTextField(5);
 
-        JButton buttonGenerate = new JButton("Generate Combinations");
-        buttonGenerate.setPreferredSize(new Dimension(200, 30));
-        buttonGenerate.addActionListener(this::generateButtonAction);
+        inputPanel.add(labelN);
+        inputPanel.add(textFieldN);
+        inputPanel.add(labelK);
+        inputPanel.add(textFieldK);
 
-        textAreaResults = new JTextArea(10, 30);
+        JButton btnGenerateCombinationsWithRepetition = new JButton("Combinations With Repetition");
+        btnGenerateCombinationsWithRepetition.addActionListener(e -> generateButtonAction("withRepetition"));
+
+        JButton btnGenerateNonRecursiveCombinations = new JButton("Non-Recursive Combinations");
+        btnGenerateNonRecursiveCombinations.addActionListener(e -> generateButtonAction("nonRecursive"));
+
+        JButton btnGenerateRecursivePlacements = new JButton("Recursive Placements Without Repetition");
+        btnGenerateRecursivePlacements.addActionListener(e -> generateButtonAction("recursivePlacements"));
+
+        JButton btnGenerateNonRecursivePlacements = new JButton("Non-Recursive Placements Without Repetition");
+        btnGenerateNonRecursivePlacements.addActionListener(e -> generateButtonAction("nonRecursivePlacements"));
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel.add(btnGenerateCombinationsWithRepetition);
+        buttonPanel.add(btnGenerateNonRecursiveCombinations);
+        buttonPanel.add(btnGenerateRecursivePlacements);
+        buttonPanel.add(btnGenerateNonRecursivePlacements);
+
+        textAreaResults = new JTextArea(10, 50);
         textAreaResults.setMargin(new Insets(5, 5, 5, 5));
         textAreaResults.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textAreaResults);
 
-        getContentPane().add(labelN);
-        getContentPane().add(textFieldCombinationsN);
-        getContentPane().add(labelK);
-        getContentPane().add(textFieldCombinationsK);
-        getContentPane().add(buttonGenerate);
-        getContentPane().add(scrollPane);
+        add(inputPanel);
+        add(buttonPanel);
+        add(scrollPane);
     }
 
-    private void generateButtonAction(ActionEvent e) {
-        String nValue = textFieldCombinationsN.getText();
-        String kValue = textFieldCombinationsK.getText();
+    private void generateButtonAction(String method) {
+        int n, k;
         try {
-            int n = Integer.parseInt(nValue);
-            int k = Integer.parseInt(kValue);
-            if (OnCombinationButtonPressed != null) {
-                OnCombinationButtonPressed.onCombination(n, k);
-                // Отобразить содержимое файла в текстовом поле после генерации
-                displayFileContent("combinations_with_repetition.txt");
-            }
-        } catch (NumberFormatException exception) {
-            JOptionPane.showMessageDialog(this, "Please enter valid integers in both fields.", "Error", JOptionPane.ERROR_MESSAGE);
+            n = Integer.parseInt(textFieldN.getText());
+            k = Integer.parseInt(textFieldK.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter valid integers for N and K.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        if (onCombinationButtonPressed != null) {
+            onCombinationButtonPressed.onCombination(n, k, method);
+        }
+
+        String filename = method.equals("withRepetition") ? "combinations_with_repetition.txt" :
+                method.equals("nonRecursive") ? "non_recursive_combinations.txt" :
+                        method.equals("recursivePlacements") ? "recursive_placements_without_repetition.txt" :
+                                "non_recursive_placements_without_repetition.txt";
+        displayFileContent(filename);
     }
 
-    // Метод для чтения и отображения содержимого файла в текстовой области
     private void displayFileContent(String filename) {
         try {
             String content = new String(Files.readAllBytes(Paths.get(filename)));

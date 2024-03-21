@@ -1,6 +1,8 @@
 package CombObjects;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 
 public abstract class CombinatorialGenerator {
     protected int n;
@@ -47,25 +49,28 @@ public abstract class CombinatorialGenerator {
     }
 
     public static class NonRecursiveCombinations extends CombinatorialGenerator {
+
         public NonRecursiveCombinations(int n, int k) {
-            super(n, k);
+            super(Math.min(n, 26), k);
         }
 
         @Override
         public void generate(FileWriter writer) throws IOException {
             int[] combination = new int[k];
             for (int i = 0; i < k; i++) {
-                combination[i] = i;
+                combination[i] = i; // Инициализация первой комбинации
             }
 
             while (true) {
                 for (int value : combination) {
-                    writer.write((char) ('a' + value));
+                    if (value < 26) {
+                        writer.write((char) ('a' + value)); // Преобразовываем индекс в символ
+                    }
                 }
                 writer.write("\n");
 
                 int idx = k - 1;
-                while (idx >= 0 && combination[idx] == n - k + idx) {
+                while (idx >= 0 && combination[idx] == Math.min(n, 26) - k + idx) {
                     idx--;
                 }
 
