@@ -1,8 +1,7 @@
 package CombObjects;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+
 
 public abstract class CombinatorialGenerator {
     protected int n;

@@ -1,11 +1,12 @@
 import CombObjects.*;
 import WindowFrame.MainFrame;
-
 import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,11 +14,15 @@ public class Main {
             MainFrame frame = new MainFrame();
             frame.onCombinationButtonPressed = (n, k, method) -> {
                 String filename = getFilenameByMethod(method);
-                try (FileWriter writer = new FileWriter(filename)) {
-                    if (method.equals("withRepetition") || method.equals("nonRecursive")) {
-                        generateCombination(writer, n, k, method);
+                try {
+                    if (method.equals("withRepetition") || method.equals("nonRecursive") || method.equals("recursivePlacements") || method.equals("nonRecursivePlacements")) {
+                        try (FileWriter writer = new FileWriter(filename)) {
+                            generateCombination(writer, n, k, method);
+                        }
                     } else {
-                        generatePlacement(writer, n, k, method);
+                        List<Integer> nums = new ArrayList<>();
+                        for (int i = 1; i <= n; i++) nums.add(i);
+                        handleSubsetGeneration(frame, nums, filename, method);
                     }
                     displayFileContent(frame.getTextArea(), filename);
                 } catch (IOException e) {
@@ -38,16 +43,21 @@ public class Main {
                 return "recursive_placements_without_repetition.txt";
             case "nonRecursivePlacements":
                 return "non_recursive_placements_without_repetition.txt";
+            case "recursiveSubsets":
+                return "recursive_subsets.txt";
+            case "nonRecursiveSubsets":
+                return "non_recursive_subsets.txt";
             default:
                 return "output.txt";
         }
     }
 
+
     private static void generateCombination(FileWriter writer, int n, int k, String method) throws IOException {
         CombinatorialGenerator generator;
         if (method.equals("withRepetition")) {
             generator = new CombinatorialGenerator.CombinationsWithRepetition(n, k);
-        } else { // nonRecursive
+        } else {
             generator = new CombinatorialGenerator.NonRecursiveCombinations(n, k);
         }
         generator.generate(writer);
@@ -70,5 +80,18 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void handleSubsetGeneration(MainFrame frame, List<Integer> nums, String filename, String method) throws IOException {
+        if (method.equals("recursiveSubsets")) {
+            SubsetGenerator generator = new SubsetGenerator.RecursiveSubsets(nums);
+            List<List<Integer>> subsets = generator.generateSubsets();
+            SubsetGenerator.writeToFile(subsets, filename);
+        } else if (method.equals("nonRecursiveSubsets")) {
+            SubsetGenerator generator = new SubsetGenerator.NonRecursiveSubsets(nums);
+            List<List<Integer>> subsets = generator.generateSubsets();
+            SubsetGenerator.writeToFile(subsets, filename);
+        }
+        displayFileContent(frame.getTextArea(), filename);
     }
 }

@@ -2,7 +2,6 @@ package WindowFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
@@ -49,12 +48,23 @@ public class MainFrame extends JFrame {
         JButton btnGenerateNonRecursivePlacements = new JButton("Non-Recursive Placements Without Repetition");
         btnGenerateNonRecursivePlacements.addActionListener(e -> generateButtonAction("nonRecursivePlacements"));
 
+        JButton btnGenerateRecursiveSubsets = new JButton("Generate Recursive Subsets");
+        btnGenerateRecursiveSubsets.addActionListener(e -> generateButtonAction("recursiveSubsets"));
+
+        JButton btnGenerateNonRecursiveSubsets = new JButton("Generate Non-Recursive Subsets");
+        btnGenerateNonRecursiveSubsets.addActionListener(e -> generateButtonAction("nonRecursiveSubsets"));
+
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(btnGenerateCombinationsWithRepetition);
         buttonPanel.add(btnGenerateNonRecursiveCombinations);
         buttonPanel.add(btnGenerateRecursivePlacements);
         buttonPanel.add(btnGenerateNonRecursivePlacements);
+        buttonPanel.add(btnGenerateRecursiveSubsets);
+        buttonPanel.add(btnGenerateNonRecursiveSubsets);
+        add(buttonPanel);
+
 
         textAreaResults = new JTextArea(10, 50);
         textAreaResults.setMargin(new Insets(5, 5, 5, 5));
@@ -80,12 +90,33 @@ public class MainFrame extends JFrame {
             onCombinationButtonPressed.onCombination(n, k, method);
         }
 
-        String filename = method.equals("withRepetition") ? "combinations_with_repetition.txt" :
-                method.equals("nonRecursive") ? "non_recursive_combinations.txt" :
-                        method.equals("recursivePlacements") ? "recursive_placements_without_repetition.txt" :
-                                "non_recursive_placements_without_repetition.txt";
+        String filename;
+        switch (method) {
+            case "withRepetition":
+                filename = "combinations_with_repetition.txt";
+                break;
+            case "nonRecursive":
+                filename = "non_recursive_combinations.txt";
+                break;
+            case "recursivePlacements":
+                filename = "recursive_placements_without_repetition.txt";
+                break;
+            case "nonRecursivePlacements":
+                filename = "non_recursive_placements_without_repetition.txt";
+                break;
+            case "recursiveSubsets":
+                filename = "recursive_subsets.txt";
+                break;
+            case "nonRecursiveSubsets":
+                filename = "non_recursive_subsets.txt";
+                break;
+            default:
+                filename = "output.txt";
+                break;
+        }
         displayFileContent(filename);
     }
+
 
     private void displayFileContent(String filename) {
         try {
