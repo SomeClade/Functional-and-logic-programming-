@@ -15,6 +15,9 @@ public class Main {
             frame.onCombinationButtonPressed = (n, k, method) -> {
                 String filename = getFilenameByMethod(method);
                 try {
+                    if (method.equals("NonRecursiveSpecialWords") || method.equals("RecursiveSpecialWords")) {
+                        handleWordGeneration(frame, method, filename);
+                    }
                     if (method.equals("withRepetition") || method.equals("nonRecursive") || method.equals("recursivePlacements") || method.equals("nonRecursivePlacements")) {
                         try (FileWriter writer = new FileWriter(filename)) {
                             generateCombination(writer, n, k, method);
@@ -47,6 +50,10 @@ public class Main {
                 return "recursive_subsets.txt";
             case "nonRecursiveSubsets":
                 return "non_recursive_subsets.txt";
+            case "NonRecursiveSpecialWords":
+                return "non_recursive_special_words.txt";
+            case "RecursiveSpecialWords":
+                return "recursive_special_words.txt";
             default:
                 return "output.txt";
         }
@@ -94,4 +101,23 @@ public class Main {
         }
         displayFileContent(frame.getTextArea(), filename);
     }
+
+    private static void handleWordGeneration(MainFrame frame, String method, String filename) throws IOException {
+        AbstractWordGenerator generator;
+        switch (method) {
+            case "NonRecursiveSpecialWords":
+                generator = new AbstractWordGenerator.NonRecursiveSpecialWordsGenerator();
+                break;
+            case "RecursiveSpecialWords":
+                generator = new AbstractWordGenerator.RecursiveSpecialWordsGenerator();
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown word generation method: " + method);
+        }
+        try (FileWriter writer = new FileWriter(filename)) {
+            generator.generateWords(writer);
+        }
+        displayFileContent(frame.getTextArea(), filename);
+    }
+
 }

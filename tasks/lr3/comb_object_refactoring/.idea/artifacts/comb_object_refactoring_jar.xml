@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="comb_object_refactoring:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/comb_object_refactoring_jar</output-path>
+    <root id="archive" name="comb_object_refactoring.jar">
+      <element id="module-output" name="comb_object_refactoring" />
+    </root>
+  </artifact>
+</component>

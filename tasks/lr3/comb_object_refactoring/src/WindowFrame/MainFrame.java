@@ -2,6 +2,7 @@ package WindowFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
@@ -11,15 +12,17 @@ public class MainFrame extends JFrame {
     private final JTextField textFieldK;
     private final JTextArea textAreaResults;
 
+
     public interface CombinationPressed {
         void onCombination(int n, int k, String method);
     }
+
 
     public CombinationPressed onCombinationButtonPressed;
 
     public MainFrame() {
         setTitle("Combinatorial Generator");
-        setSize(600, 400);
+        setSize(600, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
@@ -54,6 +57,14 @@ public class MainFrame extends JFrame {
         JButton btnGenerateNonRecursiveSubsets = new JButton("Generate Non-Recursive Subsets");
         btnGenerateNonRecursiveSubsets.addActionListener(e -> generateButtonAction("nonRecursiveSubsets"));
 
+        JButton btnGenerateNonRecursiveSpecialWords = new JButton("Generate Non-Recursive Special Words");
+        btnGenerateNonRecursiveSpecialWords.addActionListener(e -> generateButtonAction("NonRecursiveSpecialWords"));
+
+        JButton btnGenerateRecursiveSpecialWords = new JButton("Generate Recursive Special Words");
+        btnGenerateRecursiveSpecialWords.addActionListener(e -> generateButtonAction("RecursiveSpecialWords"));
+
+
+
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
@@ -63,6 +74,8 @@ public class MainFrame extends JFrame {
         buttonPanel.add(btnGenerateNonRecursivePlacements);
         buttonPanel.add(btnGenerateRecursiveSubsets);
         buttonPanel.add(btnGenerateNonRecursiveSubsets);
+        buttonPanel.add(btnGenerateNonRecursiveSpecialWords);
+        buttonPanel.add(btnGenerateRecursiveSpecialWords);
         add(buttonPanel);
 
 
@@ -90,6 +103,7 @@ public class MainFrame extends JFrame {
             onCombinationButtonPressed.onCombination(n, k, method);
         }
 
+
         String filename;
         switch (method) {
             case "withRepetition":
@@ -110,6 +124,12 @@ public class MainFrame extends JFrame {
             case "nonRecursiveSubsets":
                 filename = "non_recursive_subsets.txt";
                 break;
+            case "NonRecursiveSpecialWords":
+                filename = "non_recursive_special_words.txt";
+                break;
+            case "RecursiveSpecialWords":
+                filename = "recursive_special_words.txt";
+                break;
             default:
                 filename = "output.txt";
                 break;
@@ -120,7 +140,11 @@ public class MainFrame extends JFrame {
 
     private void displayFileContent(String filename) {
         try {
-            String content = new String(Files.readAllBytes(Paths.get(filename)));
+            File file = new File(filename);
+            if (!file.exists()) {
+                file.createNewFile(); // Создает файл, если он не существует
+            }
+            String content = new String(Files.readAllBytes(file.toPath()));
             textAreaResults.setText(content);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error reading file: " + e.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
