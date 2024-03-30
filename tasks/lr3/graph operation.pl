@@ -1,13 +1,16 @@
-% Определение вершин и рёбер графа
+% Определение вершин, рёбер и клики графа
 vertex(a).
 vertex(b).
 vertex(c).
-
+vertex(d).
+vertex(e).
 
 edge(a, b).
 edge(b, c).
 edge(c, a).
 
+% Клика в графе
+clique([a, b, c]).
 
 % Генерация всех подмножеств списка
 subsets([], []).
@@ -15,6 +18,11 @@ subsets([E|Tail], [E|NTail]) :-
     subsets(Tail, NTail).
 subsets([_|Tail], NTail) :-
     subsets(Tail, NTail).
+
+% Проверка, является ли набор вершин покрытием алгебраического дополнения
+is_cover(Set) :-
+    findall((X, Y), complement_edge(X, Y), Edges),
+    forall(member((X, Y), Edges), (member(X, Set); member(Y, Set))).
 
 % Определение рёбер алгебраического дополнения
 complement_edge(X, Y) :-
@@ -24,28 +32,18 @@ complement_edge(X, Y) :-
     \+ edge(X, Y),
     \+ edge(Y, X).
 
-% Проверка, является ли набор вершин покрытием алгебраического дополнения
-is_cover(Set) :-
-    findall((X, Y), complement_edge(X, Y), Edges),
-    forall(member((X, Y), Edges), (member(X, Set); member(Y, Set))).
+% Сортировка наборов по размеру и возвращение списка отсортированных наборов
+sort_sets(Sets, SortedSets) :-
+    map_list_to_pairs(length, Sets, Pairs),
+    sort(1, @>=, Pairs, SortedPairs),
+    pairs_values(SortedPairs, SortedSets).
 
 % Нахождение наименьшего покрытия алгебраического дополнения
 min_cover(MinSet) :-
     findall(V, vertex(V), Vertices),
     findall(Set, (subsets(Vertices, Set), is_cover(Set)), Sets),
-    min_length(Sets, MinSet).
-
-% Находит список с минимальной длиной
-min_length([F|Rest], MinSet) :-
-    min_length(Rest, F, MinSet).
-
-% Вспомогательная функция для min_length
-min_length([], Min, Min).
-min_length([Set|Rest], CurrentMin, Min) :-
-    length(Set, LenSet),
-    length(CurrentMin, LenCurrentMin),
-    (LenSet < LenCurrentMin -> NewMin = Set; NewMin = CurrentMin),
-    min_length(Rest, NewMin, Min).
+    sort_sets(Sets, SortedSets),
+    SortedSets = [MinSet|_].  % Исправлено для корректного вывода
 
 % Пример использования
 example :-
