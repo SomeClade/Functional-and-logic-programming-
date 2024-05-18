@@ -7,24 +7,22 @@ internal class MainKtTest {
 
     @Test
     fun maxDigit() {
-        val mainLoop = MainLoop()
-        val mainRecursion = MainRecursion()
-        val input = 987654
-        val expected = 9
-        assertEquals(expected, mainLoop.maxDigit(input))
-        assertEquals(expected, mainRecursion.maxDigitRecursive(input))
-        assertEquals(expected, mainRecursion.maxDigitTailRecursive(input))
+        val inputs = listOf(987654, 123456, 1111, 0)
+        val expectedResults = listOf(9, 6, 1, 0)
+
+        for ((input, expected) in inputs.zip(expectedResults)) {
+            assertEquals(expected, maxDigitLoop(input))
+            assertEquals(expected, maxDigitRecursive(input))
+            assertEquals(expected, maxDigitTailRecursive(input))
+        }
     }
 
     @Test
     fun minOddDigit() {
-        val mainLoop = MainLoop()
-        val mainRecursion = MainRecursion()
-
         fun checkAll(input: Int, expected: Int) {
-            assertEquals(expected, mainLoop.minOddDigit(input))
-            assertEquals(expected, mainRecursion.minOddDigitRecursive(input))
-            assertEquals(expected, mainRecursion.minOddDigitTailRecursive(input))
+            assertEquals(expected, minOddDigitLoop(input))
+            assertEquals(expected, minOddDigitRecursive(input))
+            assertEquals(expected, minOddDigitTailRecursive(input))
         }
 
         checkAll(123456, 1)
@@ -35,13 +33,9 @@ internal class MainKtTest {
 
     @Test
     fun gcd() {
-        val mainLoop = MainLoop()
-        val mainRecursion = MainRecursion()
-
         fun checkAll(a: Int, b: Int, expected: Int) {
-            assertEquals(expected, mainLoop.gcd(a, b))
-            assertEquals(expected, mainRecursion.gcdRecursive(a, b))
-            assertEquals(expected, mainRecursion.gcdTailRecursive(a, b))
+            assertEquals(expected, gcdRecursive(a, b))
+            assertEquals(expected, gcdTailRecursive(a, b))
         }
 
         checkAll(54, 24, 6)
