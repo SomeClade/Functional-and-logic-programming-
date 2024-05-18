@@ -1,0 +1,11 @@
+123456 maxDigitLoop
+987654 minOddDigitLoop
+654321 maxDigitRecursive
+13579 minOddDigitRecursive
+24680 minOddDigitTailRecursive
+12345 maxDigitTailRecursive
+48 180 gcdRecursive
+54 24 gcdTailRecursive
+101 103 gcdRecursive
+20 countEvenNonCoprimeNumbers
+10 productMaxNonCoprimeAndSumDigits

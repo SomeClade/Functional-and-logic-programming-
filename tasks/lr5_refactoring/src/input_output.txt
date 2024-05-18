@@ -1,0 +1,29 @@
+123456 maxDigitLoop 6
+987654 minOddDigitLoop 5
+654321 maxDigitRecursive 6
+13579 minOddDigitRecursive 1
+24680 minOddDigitTailRecursive -1
+12345 maxDigitTailRecursive 5
+48 180 gcdRecursive 12
+54 24 gcdTailRecursive 6
+101 103 gcdRecursive 1
+123456 maxDigitLoop 6
+987654 minOddDigitLoop 5
+654321 maxDigitRecursive 6
+13579 minOddDigitRecursive 1
+24680 minOddDigitTailRecursive -1
+12345 maxDigitTailRecursive 5
+48 180 gcdRecursive 12
+54 24 gcdTailRecursive 6
+101 103 gcdRecursive 1
+123456 maxDigitLoop 6
+987654 minOddDigitLoop 5
+654321 maxDigitRecursive 6
+13579 minOddDigitRecursive 1
+24680 minOddDigitTailRecursive -1
+12345 maxDigitTailRecursive 5
+48 180 gcdRecursive 12
+54 24 gcdTailRecursive 6
+101 103 gcdRecursive 1
+20 countEvenNonCoprimeNumbers 10
+10 productMaxNonCoprimeAndSumDigits 5
