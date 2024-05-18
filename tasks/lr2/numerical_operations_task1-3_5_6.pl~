@@ -52,14 +52,14 @@ write_sum(+Sum) :-
     write('Сумма искомых делителей: '), write(Sum), nl.
 
 % Сумма элементов списка, рекурсия вниз
-sum_list_down(+List, Sum) :-
+sum_list_down(+List, ?Sum) :-
     sum_list_down_helper(List, 0, Sum).
 sum_list_down_helper([], Acc, Acc).
 sum_list_down_helper([Head|Tail], Acc, Sum) :-
     NewAcc is Acc + Head, sum_list_down_helper(Tail, NewAcc, Sum).
 
 % Сумма элементов списка, рекурсия вверх
-sum_list_up(+List, Sum) :-
+sum_list_up(+List, ?Sum) :-
     (List = [] -> Sum = 0;
      List = [Head|Tail], sum_list_up(Tail, TailSum), Sum is Head + TailSum).
 
@@ -98,10 +98,10 @@ count_divisors_not_div_by_3(+Number, -Count) :-
     length(Divisors, Count).
 
 % сумма и произведение цифр числа, Наибольший общий делитель
-sum_digits(Number, Sum), prod_digits(+Number, -Product), gcd(+A, +B, -GCD) :-
+sum_digits(+Number, -Sum), prod_digits(+Number, -Product), gcd(+A, +B, -GCD) :-
     sum_digits(0, 0), prod_digits(0, 1), gcd(A, 0, A).
 
-% Сумма цифр числа (+number -Sum)
+% Сумма цифр числа (+number -Sum) 
 sum_digits(Number, Sum) :-
     Number > 0,
     NextDigit is Number mod 10,
@@ -208,9 +208,3 @@ find_numbers(Number, _, Limit, TotalSum, TotalSum) :-
 % Запуск поиска чисел, удовлетворяющих условию для пятых степеней
 solve :-
     find_numbers(5, 200000). % Предел задан с запасом
-
-
-
-
-
-
