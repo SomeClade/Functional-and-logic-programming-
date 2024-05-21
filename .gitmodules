@@ -1,0 +1,3 @@
+[submodule "tasks/funclogprog-lab7"]
+	path = tasks/funclogprog-lab7
+	url = https://github.com/SomeClade/funclogprog-lab7.git
